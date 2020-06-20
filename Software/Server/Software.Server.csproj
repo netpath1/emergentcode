@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\Software.Client.csproj" />
+    <ProjectReference Include="..\Shared\Software.Shared.csproj" />
+    <ProjectReference Include="..\Software.Common.Configuration\Software.Common.Configuration.csproj" />
+    <ProjectReference Include="..\Software.Data.Managers\Software.Data.Managers.csproj" />
+    <ProjectReference Include="..\Software.Data\Software.Data.csproj" />
+    <ProjectReference Include="..\Software.Domain.Managers\Software.Domain.Managers.csproj" />
+    <ProjectReference Include="..\Software.Domain\Software.Domain.csproj" />
+  </ItemGroup>
+
+
+</Project>

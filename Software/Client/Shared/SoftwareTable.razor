@@ -1,0 +1,27 @@
+﻿@using Software.Shared
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="250px">Software Title</th>
+                <th width="100px">Version</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var softwareItem in SoftwareList)
+            {
+                <tr>
+                    <td>@softwareItem.Name</td>
+                    <td>@softwareItem.Version</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+@code {
+    [Parameter]
+    public SoftwareSearchResult[] SoftwareList { get; set; } = Array.Empty<SoftwareSearchResult>();
+
+    [Parameter]
+    public EventCallback<SoftwareSearchResult[]> SoftwareListChanged { get; set; }
+}

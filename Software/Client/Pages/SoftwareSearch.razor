@@ -1,0 +1,46 @@
+﻿@page "/"
+@using System.Text.Encodings.Web
+@using Software.Shared;
+
+@inject HttpClient Http
+
+<h3>Search Software</h3>
+
+<div style="margin-bottom:10px">
+    <input @bind="CurrentSearchFilter" placeholder="Enter version filter (ie '1.0')" />
+    <button class="btn btn-primary" @onclick="UpdateResults">Search</button>
+</div>
+
+<SoftwareTable @bind-SoftwareList="SearchResults"  @bind-SoftwareList:event="SoftwareListChanged"></SoftwareTable>
+
+@code {
+    private string CurrentSearchFilter { get; set; }
+
+    private SoftwareSearchResult[] SearchResults = Array.Empty<SoftwareSearchResult>();
+
+    private async void UpdateResults()
+    {
+        if (string.IsNullOrWhiteSpace(CurrentSearchFilter))
+        {
+            SearchResults = Array.Empty<SoftwareSearchResult>();
+        }
+        else
+        {
+            try
+            {
+                var filter = UrlEncoder.Default.Encode(CurrentSearchFilter);
+
+                SearchResults = await Http.GetFromJsonAsync<SoftwareSearchResult[]>(
+                    $"api/Software/SearchByVersion/{filter}");
+            }
+            catch(Exception exception)
+            {
+                SearchResults = Array.Empty<SoftwareSearchResult>();
+
+                // throw exception;
+            }
+        }
+
+        StateHasChanged();
+    }
+}
