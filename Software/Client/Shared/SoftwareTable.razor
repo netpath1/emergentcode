@@ -20,8 +20,8 @@
 
 @code {
     [Parameter]
-    public SoftwareSearchResult[] SoftwareList { get; set; } = Array.Empty<SoftwareSearchResult>();
+    public SoftwareSearchItem[] SoftwareList { get; set; } = Array.Empty<SoftwareSearchItem>();
 
     [Parameter]
-    public EventCallback<SoftwareSearchResult[]> SoftwareListChanged { get; set; }
+    public EventCallback<SoftwareSearchItem[]> SoftwareListChanged { get; set; }
 }

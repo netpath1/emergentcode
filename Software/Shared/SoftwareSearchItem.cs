@@ -1,6 +1,6 @@
 ﻿namespace Software.Shared
 {
-    public class SoftwareSearchResult
+    public class SoftwareSearchItem
     {
         #region Public Properties
 

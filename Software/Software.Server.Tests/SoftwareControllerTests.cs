@@ -21,30 +21,87 @@ namespace Software.Server.Tests
         }
 
         [TestMethod]
-        public void SearchSoftwareTests()
+        public void SearchSoftwareVersionTests()
         {
             var controller = new SoftwareController(logger, softwareManager);
 
-            var softwareResults = controller.SearchByVersion("1.0").ToList();
+            var searchParams = new Software.Shared.SoftwareSearchItem()
+            {
+                Version = "1.0"
+            };
+
+            var softwareResults = controller.Search(searchParams).ToList();
             // Known count with fixed hard code data manager as configured.
             Assert.IsTrue(softwareResults.Count == 7);
 
-            softwareResults = controller.SearchByVersion("9999").ToList();
+            searchParams.Version = "9999";
+            softwareResults = controller.Search(searchParams).ToList();
             Assert.IsTrue(softwareResults.Count == 0);
 
-            softwareResults = controller.SearchByVersion("0.0").ToList();
+            searchParams.Version = "0.0";
+            softwareResults = controller.Search(searchParams).ToList();
             Assert.IsTrue(softwareResults.Count == 9);
 
-            softwareResults = controller.SearchByVersion("2019.").ToList();
+            searchParams.Version = "2019.";
+            softwareResults = controller.Search(searchParams).ToList();
             Assert.IsTrue(softwareResults.Count == 1);
 
-            softwareResults = controller.SearchByVersion("2019.0").ToList();
+            searchParams.Version = "2019.0";
+            softwareResults = controller.Search(searchParams).ToList();
             Assert.IsTrue(softwareResults.Count == 1);
 
-            softwareResults = controller.SearchByVersion("2019.1").ToList();
+            searchParams.Version = "2019.1";
+            softwareResults = controller.Search(searchParams).ToList();
             Assert.IsTrue(softwareResults.Count == 0);
         }
 
+        [TestMethod]
+        public void SearchSoftwareNameTests()
+        {
+            var controller = new SoftwareController(logger, softwareManager);
+
+            var searchParams = new Software.Shared.SoftwareSearchItem()
+            {
+                Name = "vis"
+            };
+
+            var softwareResults = controller.Search(searchParams).ToList();
+            // Known count with fixed hard code data manager as configured.
+            Assert.IsTrue(softwareResults.Count == 3);
+
+            searchParams.Name = "code";
+            softwareResults = controller.Search(searchParams).ToList();
+            Assert.IsTrue(softwareResults.Count == 1);
+
+            searchParams.Name = "xyz";
+            softwareResults = controller.Search(searchParams).ToList();
+            Assert.IsTrue(softwareResults.Count == 0);
+        }
+
+        [TestMethod]
+        public void SearchSoftwareNameAndVersionTests()
+        {
+            var controller = new SoftwareController(logger, softwareManager);
+
+            var searchParams = new Software.Shared.SoftwareSearchItem()
+            {
+                Name = "vis",
+                Version = "1."
+
+            };
+
+            var softwareResults = controller.Search(searchParams).ToList();
+            // Known count with fixed hard code data manager as configured.
+            Assert.IsTrue(softwareResults.Count == 3);
+
+            searchParams.Version = "2018.1";
+            softwareResults = controller.Search(searchParams).ToList();
+            Assert.IsTrue(softwareResults.Count == 1);
+
+            searchParams.Version = "2025.1";
+            softwareResults = controller.Search(searchParams).ToList();
+            Assert.IsTrue(softwareResults.Count == 0);
+        }
 
         [TestMethod]
         public void SearchSoftwareExceptionTests()
@@ -53,7 +110,13 @@ namespace Software.Server.Tests
 
             Assert.ThrowsException<HttpResponseException>(() =>
             {
-                controller.SearchByVersion("1.0.abc").ToList();
+                controller
+                    .Search(
+                        new Shared.SoftwareSearchItem()
+                        {
+                            Version = "1.0.abc"
+                        })
+                    .ToList();
             });
         }
     }

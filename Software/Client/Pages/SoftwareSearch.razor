@@ -7,38 +7,32 @@
 <h3>Search Software</h3>
 
 <div style="margin-bottom:10px">
-    <input @bind="CurrentSearchFilter" placeholder="Enter version filter (ie '1.0')" />
+    <input @bind="SoftwareSearchItem.Name" placeholder="Name filter" title="Search for software with names containing entered value" />
+    <input @bind="SoftwareSearchItem.Version" placeholder="Version filter (ie '1.0')" title="Search for software with versions greater than entered value" />
     <button class="btn btn-primary" @onclick="UpdateResults">Search</button>
 </div>
 
 <SoftwareTable @bind-SoftwareList="SearchResults"  @bind-SoftwareList:event="SoftwareListChanged"></SoftwareTable>
 
 @code {
-    private string CurrentSearchFilter { get; set; }
+    private SoftwareSearchItem SoftwareSearchItem { get; set; } = new SoftwareSearchItem();
 
-    private SoftwareSearchResult[] SearchResults = Array.Empty<SoftwareSearchResult>();
+    private SoftwareSearchItem[] SearchResults = Array.Empty<SoftwareSearchItem>();
 
     private async void UpdateResults()
     {
-        if (string.IsNullOrWhiteSpace(CurrentSearchFilter))
+        try
         {
-            SearchResults = Array.Empty<SoftwareSearchResult>();
+            var response = await Http.PostAsJsonAsync<SoftwareSearchItem>(
+                $"api/Software/Search", SoftwareSearchItem);
+
+            SearchResults = await response.Content.ReadFromJsonAsync<SoftwareSearchItem[]>();
         }
-        else
+        catch(Exception exception)
         {
-            try
-            {
-                var filter = UrlEncoder.Default.Encode(CurrentSearchFilter);
+            SearchResults = Array.Empty<SoftwareSearchItem>();
 
-                SearchResults = await Http.GetFromJsonAsync<SoftwareSearchResult[]>(
-                    $"api/Software/SearchByVersion/{filter}");
-            }
-            catch(Exception exception)
-            {
-                SearchResults = Array.Empty<SoftwareSearchResult>();
-
-                // throw exception;
-            }
+            // throw exception;
         }
 
         StateHasChanged();

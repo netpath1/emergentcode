@@ -59,7 +59,8 @@ namespace Software.Domain.Managers
 
         private bool CheckName(string nameFilter, string name)
         {
-            return string.IsNullOrWhiteSpace(nameFilter) || name.Contains(nameFilter);
+            return string.IsNullOrWhiteSpace(nameFilter) || 
+                name.ToLower().Contains(nameFilter.ToLower());
         }
 
         private bool CheckVersion(Version versionFilter, Version checkVersion, VersionComparison versionFilterComparision)

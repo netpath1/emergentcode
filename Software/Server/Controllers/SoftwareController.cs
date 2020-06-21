@@ -24,20 +24,21 @@ namespace Software.Server.Controllers
             this.softwareManager = softwareManager;
         }
 
-        [HttpGet]
-        [Route("SearchByVersion/{versionFilter}")]
-        public IEnumerable<SoftwareSearchResult> SearchByVersion(string versionFilter)
+        [HttpPost]
+        [Route("Search")]
+        public IEnumerable<SoftwareSearchItem> Search(SoftwareSearchItem softwareSearchItem)
         {
             try
             {
                 var results = softwareManager
                     .GetSoftware(
-                        versionFilter: versionFilter,
+                        softwareSearchItem.Name,
+                        softwareSearchItem.Version,
                         versionComparision: VersionComparison.GreaterThan)
                     .OrderBy(o => o.Name)
                     .ThenBy(o => o.Version)
                     .Select(o => 
-                        new SoftwareSearchResult()
+                        new SoftwareSearchItem()
                         {
                             Name = o.Name,
                             Version = o.Version.ToString()
