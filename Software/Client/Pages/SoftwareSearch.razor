@@ -7,7 +7,7 @@
 <h3>Search Software</h3>
 
 <div style="margin-bottom:10px">
-    <input @bind="SoftwareSearchItem.Name" placeholder="Name filter" title="Search for software with names containing entered value" />
+    <input @bind="SoftwareSearchItem.Name" placeholder="Title filter" title="Search for software with titles containing entered value" />
     <input @bind="SoftwareSearchItem.Version" placeholder="Version filter (ie '1.0')" title="Search for software with versions greater than entered value" />
     <button class="btn btn-primary" @onclick="UpdateResults">Search</button>
 </div>
