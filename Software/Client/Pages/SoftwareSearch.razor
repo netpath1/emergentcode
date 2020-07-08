@@ -6,11 +6,31 @@
 
 <h3>Search Software</h3>
 
-<div style="margin-bottom:10px">
-    <input @bind="SoftwareSearchItem.Name" placeholder="Title filter" title="Search for software with titles containing entered value" />
-    <input @bind="SoftwareSearchItem.Version" placeholder="Version filter (ie '1.0')" title="Search for software with versions greater than entered value" />
-    <button class="btn btn-primary" @onclick="UpdateResults">Search</button>
-</div>
+<EditForm Context="formContext" Model="@SoftwareSearchItem" OnValidSubmit="UpdateResults">
+    <DataAnnotationsValidator />
+
+    <div class="container" style="margin-bottom:10px">
+        <div class="row">
+            <div class="col-5">
+                <span>
+                    <label for="TitleFilter">Title: </label>
+                    <InputText id="TitleFilter" @bind-Value="SoftwareSearchItem.Name" placeholder="Title filter" title="Search for software with titles containing entered value"></InputText>
+                </span>
+                <ValidationMessage For="@(() => SoftwareSearchItem.Name)" />
+            </div>
+            <div class="col-5">
+                <span>
+                    <label for="VersionFilter">Version: </label>
+                    <InputText id="VersionFilter" @bind-Value="SoftwareSearchItem.Version" placeholder="Version filter (ie '1.0')" title="Search for software with versions greater than entered value"></InputText>
+                </span>
+                <ValidationMessage For="@(() => SoftwareSearchItem.Version)" />
+            </div>
+            <div class="col-2">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
 
 <SoftwareTable @bind-SoftwareList="SearchResults"  @bind-SoftwareList:event="SoftwareListChanged"></SoftwareTable>
 
